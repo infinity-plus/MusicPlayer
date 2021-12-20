@@ -89,19 +89,18 @@ async def cb_handler(client: Client, query: CallbackQuery):
         group_call.restart_playout()
         if not playlist:
             pl = f"{emoji.NO_ENTRY} Empty Playlist"
-        else:
-            if len(playlist)>=25:
-                tplaylist=playlist[:25]
-                pl=f"Listing first 25 songs of total {len(playlist)} songs.\n"
-                pl += f"{emoji.PLAY_BUTTON} **Playlist**:\n" + "\n".join([
-                    f"**{i}**. **🎸{x[1]}**\n   👤**Requested by:** {x[4]}"
-                    for i, x in enumerate(tplaylist)
-                    ])
-            else:
-                pl = f"{emoji.PLAY_BUTTON} **Playlist**:\n" + "\n".join([
-                    f"**{i}**. **🎸{x[1]}**\n   👤**Requested by:** {x[4]}\n"
-                    for i, x in enumerate(playlist)
+        elif len(playlist)>=25:
+            tplaylist=playlist[:25]
+            pl=f"Listing first 25 songs of total {len(playlist)} songs.\n"
+            pl += f"{emoji.PLAY_BUTTON} **Playlist**:\n" + "\n".join([
+                f"**{i}**. **🎸{x[1]}**\n   👤**Requested by:** {x[4]}"
+                for i, x in enumerate(tplaylist)
                 ])
+        else:
+            pl = f"{emoji.PLAY_BUTTON} **Playlist**:\n" + "\n".join([
+                f"**{i}**. **🎸{x[1]}**\n   👤**Requested by:** {x[4]}\n"
+                for i, x in enumerate(playlist)
+            ])
         try:
             await query.edit_message_text(
                     f"{pl}",
@@ -122,20 +121,19 @@ async def cb_handler(client: Client, query: CallbackQuery):
     elif query.data == "pause":
         if not playlist:
             return
-        else:
-            mp.group_call.pause_playout()
-            if len(playlist)>=25:
-                tplaylist=playlist[:25]
-                pl=f"Listing first 25 songs of total {len(playlist)} songs.\n"
-                pl += f"{emoji.PLAY_BUTTON} **Playlist**:\n" + "\n".join([
-                    f"**{i}**. **🎸{x[1]}**\n   👤**Requested by:** {x[4]}"
-                    for i, x in enumerate(tplaylist)
-                    ])
-            else:
-                pl = f"{emoji.PLAY_BUTTON} **Playlist**:\n" + "\n".join([
-                    f"**{i}**. **🎸{x[1]}**\n   👤**Requested by:** {x[4]}\n"
-                    for i, x in enumerate(playlist)
+        mp.group_call.pause_playout()
+        if len(playlist)>=25:
+            tplaylist=playlist[:25]
+            pl=f"Listing first 25 songs of total {len(playlist)} songs.\n"
+            pl += f"{emoji.PLAY_BUTTON} **Playlist**:\n" + "\n".join([
+                f"**{i}**. **🎸{x[1]}**\n   👤**Requested by:** {x[4]}"
+                for i, x in enumerate(tplaylist)
                 ])
+        else:
+            pl = f"{emoji.PLAY_BUTTON} **Playlist**:\n" + "\n".join([
+                f"**{i}**. **🎸{x[1]}**\n   👤**Requested by:** {x[4]}\n"
+                for i, x in enumerate(playlist)
+            ])
 
         try:
             await query.edit_message_text(f"{emoji.PLAY_OR_PAUSE_BUTTON} Paused\n\n{pl},",
@@ -152,24 +150,23 @@ async def cb_handler(client: Client, query: CallbackQuery):
             )
         except MessageNotModified:
             pass
-    
+
     elif query.data == "resume":   
         if not playlist:
             return
-        else:
-            mp.group_call.resume_playout()
-            if len(playlist)>=25:
-                tplaylist=playlist[:25]
-                pl=f"Listing first 25 songs of total {len(playlist)} songs.\n"
-                pl += f"{emoji.PLAY_BUTTON} **Playlist**:\n" + "\n".join([
-                    f"**{i}**. **🎸{x[1]}**\n   👤**Requested by:** {x[4]}"
-                    for i, x in enumerate(tplaylist)
-                    ])
-            else:
-                pl = f"{emoji.PLAY_BUTTON} **Playlist**:\n" + "\n".join([
-                    f"**{i}**. **🎸{x[1]}**\n   👤**Requested by:** {x[4]}\n"
-                    for i, x in enumerate(playlist)
+        mp.group_call.resume_playout()
+        if len(playlist)>=25:
+            tplaylist=playlist[:25]
+            pl=f"Listing first 25 songs of total {len(playlist)} songs.\n"
+            pl += f"{emoji.PLAY_BUTTON} **Playlist**:\n" + "\n".join([
+                f"**{i}**. **🎸{x[1]}**\n   👤**Requested by:** {x[4]}"
+                for i, x in enumerate(tplaylist)
                 ])
+        else:
+            pl = f"{emoji.PLAY_BUTTON} **Playlist**:\n" + "\n".join([
+                f"**{i}**. **🎸{x[1]}**\n   👤**Requested by:** {x[4]}\n"
+                for i, x in enumerate(playlist)
+            ])
 
         try:
             await query.edit_message_text(f"{emoji.PLAY_OR_PAUSE_BUTTON} Resumed\n\n{pl}",
@@ -190,20 +187,19 @@ async def cb_handler(client: Client, query: CallbackQuery):
     elif query.data=="skip":   
         if not playlist:
             return
+        await mp.skip_current_playing()
+        if len(playlist)>=25:
+            tplaylist=playlist[:25]
+            pl=f"Listing first 25 songs of total {len(playlist)} songs.\n"
+            pl += f"{emoji.PLAY_BUTTON} **Playlist**:\n" + "\n".join([
+                f"**{i}**. **🎸{x[1]}**\n   👤**Requested by:** {x[4]}"
+                for i, x in enumerate(tplaylist)
+            ])
         else:
-            await mp.skip_current_playing()
-            if len(playlist)>=25:
-                tplaylist=playlist[:25]
-                pl=f"Listing first 25 songs of total {len(playlist)} songs.\n"
-                pl += f"{emoji.PLAY_BUTTON} **Playlist**:\n" + "\n".join([
-                    f"**{i}**. **🎸{x[1]}**\n   👤**Requested by:** {x[4]}"
-                    for i, x in enumerate(tplaylist)
-                ])
-            else:
-                pl = f"{emoji.PLAY_BUTTON} **Playlist**:\n" + "\n".join([
-                    f"**{i}**. **🎸{x[1]}**\n   👤**Requested by:** {x[4]}\n"
-                    for i, x in enumerate(playlist)
-                ])
+            pl = f"{emoji.PLAY_BUTTON} **Playlist**:\n" + "\n".join([
+                f"**{i}**. **🎸{x[1]}**\n   👤**Requested by:** {x[4]}\n"
+                for i, x in enumerate(playlist)
+            ])
 
         try:
             await query.edit_message_text(f"{emoji.PLAY_OR_PAUSE_BUTTON} Skipped\n\n{pl}",
