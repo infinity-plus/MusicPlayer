@@ -32,25 +32,16 @@ async def in_convo(_, client, message):
         k=Config.CONV.get(message.reply_to_message.message_id)
     except:
         return False
-    if k and k == "START":
-        return True
-    else:
-        return False
+    return bool(k and k == "START")
 
 async def in_co_nvo(_, client, message):
     try:
         k=Config.CONV.get(message.reply_to_message.message_id)
     except:
         return False
-    if k and k == "PLAYLIST":
-        return True
-    else:
-        return False
+    return bool(k and k == "PLAYLIST")
 async def is_reply(_, client, message):
-    if Config.REPLY_MESSAGE:
-        return True
-    else:
-        return False
+    return bool(Config.REPLY_MESSAGE)
 
 start_filter=filters.create(in_convo)   
 playlist_filter=filters.create(in_co_nvo) 
@@ -114,7 +105,5 @@ async def reply(client, message):
                 await client.send_message(chat_id=admin, text=f"Hey,\nIt seems you have disabled Inline Mode for @{USERNAME}\n\nA Nibba is spaming me in PM, enable inline mode for @{USERNAME} from @Botfather to reply him.")
             except Exception as e:
                 print(e)
-                pass
     except Exception as e:
         print(e)
-        pass

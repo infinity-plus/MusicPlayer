@@ -52,10 +52,7 @@ async def is_admin(_, client, message: Message):
     admins = await mp.get_admins(CHAT)
     if message.from_user is None and message.sender_chat:
         return True
-    if message.from_user.id in admins:
-        return True
-    else:
-        return False
+    return message.from_user.id in admins
 
 admin_filter=filters.create(is_admin)   
 
@@ -138,7 +135,6 @@ async def yplay(_, message: Message):
                         process.kill()
                     except Exception as e:
                         print(e)
-                        pass
                     FFMPEG_PROCESSES[CHAT] = ""
             if not group_call.is_connected:
                 await mp.start_call()
@@ -169,10 +165,10 @@ async def yplay(_, message: Message):
         if EDIT_TITLE:
             await mp.edit_title()
         if message.chat.type == "private":
-            await message.reply_text(pl, disable_web_page_preview=True)        
+            await message.reply_text(pl, disable_web_page_preview=True)
         elif LOG_GROUP:
             await mp.send_playlist()
-        elif not LOG_GROUP and message.chat.type == "supergroup":
+        elif message.chat.type == "supergroup":
             k=await message.reply_text(pl, disable_web_page_preview=True)
             await mp.delete(k)
         for track in playlist[:2]:
@@ -183,7 +179,7 @@ async def yplay(_, message: Message):
         if type=="youtube":
             msg = await message.reply_text("⚡️ **Fetching Song From YouTube...**")
             url=yturl
-        elif type=="query":
+        else:
             try:
                 msg = await message.reply_text("⚡️ **Fetching Song From YouTube...**")
                 ytquery=ysearch
@@ -198,8 +194,6 @@ async def yplay(_, message: Message):
                 await mp.delete(message)
                 await mp.delete(msg)
                 return
-        else:
-            return
         ydl_opts = {
             "geo-bypass": True,
             "nocheckcertificate": True
@@ -222,7 +216,6 @@ async def yplay(_, message: Message):
             thumb = info["thumbnail"]
         except:
             thumb="https://telegra.ph/file/181242eab5c4a74916d01.jpg"
-            pass
         if int(duration) > DURATION_LIMIT:
             k=await message.reply_text(f"❌ Videos longer than {DURATION_LIMIT} minute(s) aren't allowed, the provided video is {duration} minute(s)")
             await mp.delete(k)
@@ -253,7 +246,6 @@ async def yplay(_, message: Message):
                         process.kill()
                     except Exception as e:
                         print(e)
-                        pass
                     FFMPEG_PROCESSES[CHAT] = ""
             if not group_call.is_connected:
                 await mp.start_call()
@@ -289,7 +281,7 @@ async def yplay(_, message: Message):
             await message.reply_text(pl, disable_web_page_preview=True)
         if LOG_GROUP:
             await mp.send_playlist()
-        elif not LOG_GROUP and message.chat.type == "supergroup":
+        elif message.chat.type == "supergroup":
             k=await message.reply_text(pl, disable_web_page_preview=True)
             await mp.delete(k)
         for track in playlist[:2]:

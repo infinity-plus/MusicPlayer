@@ -81,7 +81,6 @@ async def restart(client, message):
             process.kill()
         except Exception as e:
             print(e)
-            pass
         FFMPEG_PROCESSES[CHAT] = ""
     Thread(
         target=stop_and_restart
